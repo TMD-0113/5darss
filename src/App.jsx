@@ -1,37 +1,72 @@
-import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import React, { useContext } from "react";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
+
 import Home from "./pages/Home";
-import About from "./pages/About";
 import Contact from "./pages/Contact";
-import ProductDetails from "./pages/ProductDetails";
+import MainLayout from "./layouts/MainLayout";
+import Cart from "./pages/Cart";
+import Login from "./pages/Login";
+import SignUp from "./pages/Signup";
+import ProductDetail from "./pages/ProductDetail"; 
+import { Protected } from "./components/Protected";
 
-const App = () => {
-  const [darkMode, setDarkMode] = useState(false);
+import { GlobalContext } from "./context/globalContext";
+import useFetch from "./hooks/useFetch";
 
-  const toggleTheme = () => {
-    setDarkMode((prev) => !prev);
-  };
+function App() {
+  const { user } = useContext(GlobalContext);
 
-  useEffect(() => {
-    document.body.className = darkMode ? "dark-theme" : "light-theme";
-  }, [darkMode]);
-
-  return (
-    <>
-      <Navbar onToggleTheme={toggleTheme} darkMode={darkMode} />
-      <main style={{ minHeight: "80vh", padding: "20px" }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/products/:id" element={<ProductDetails />} />
-        </Routes>
-      </main>
-      <Footer />
-    </>
+  const routes = createBrowserRouter(
+    [
+      {
+        path: "/",
+        element: (
+          <Protected user={user}>
+            <MainLayout />
+          </Protected>
+        ),
+        children: [
+          { index: true, element: <Home /> },
+          { path: "contact", element: <Contact /> },
+          { path: "product/:id", element: <ProductDetail /> },
+          { path: "cart", element: <Cart /> },
+        ],
+      },
+      {
+        path: "/login",
+        element: user ? <Navigate to="/" /> : <Login />,
+      },
+      {
+        path: "/sign",
+        element: user ? <Navigate to="/" /> : <SignUp />,
+      },
+    ],
+    {
+      future: {
+        v7_startTransition: true,
+      },
+    }
   );
-};
+
+  const { data: products, loading } = useFetch(
+    "https://dummyjson.com/products?limit=194"
+  );
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <span className="loading loading-spinner loading-lg text-orange-500">
+          Loading...
+        </span>
+      </div>
+    );
+  }
+
+  return <RouterProvider router={routes} />;
+}
 
 export default App;

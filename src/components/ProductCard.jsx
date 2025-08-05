@@ -1,53 +1,31 @@
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const ProductCard = ({ product }) => {
+function Cart() {
+  const location = useLocation();
+  const cartItems = location.state?.cartItems || [];
+
   return (
-    <div
-      className="card"
-      style={{
-        width: "220px",
-        height: "380px",
-        borderRadius: "8px",
-        padding: "10px",
-        margin: "10px",
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        textAlign: "center",
-      }}
-    >
-      <img
-        src={product.thumbnail}
-        alt={product.title}
-        style={{
-          width: "100%",
-          height: "150px",
-          objectFit: "cover",
-          borderRadius: "4px",
-        }}
-      />
-      <h3
-        style={{ fontSize: "16px", margin: "10px 0 5px", fontWeight: "bold" }}
-      >
-        {product.title}
-      </h3>
-      <p style={{ fontSize: "13px", flexGrow: 1 }}>
-        {product.description.slice(0, 60)}...
-      </p>
-      <p style={{ fontWeight: "bold", marginTop: "10px" }}>${product.price}</p>
-      <Link
-        to={`/products/${product.id}`}
-        style={{
-          marginTop: "5px",
-          color: "inherit",
-          textDecoration: "underline",
-        }}
-      >
-        Ma'lumotlar
-      </Link>
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">Savat</h2>
+      {cartItems.length === 0 ? (
+        <p>Savat bo‘sh.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {cartItems.map(({ id, title, image, price }) => (
+            <div key={id} className="bg-white shadow rounded p-4">
+              <img
+                src={image}
+                alt={title}
+                className="h-40 object-contain mx-auto"
+              />
+              <h3 className="text-lg font-semibold mt-2">{title}</h3>
+              <p className="text-yellow-600 font-bold">${price}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
-};
+}
 
-export default ProductCard;
+export default Cart;

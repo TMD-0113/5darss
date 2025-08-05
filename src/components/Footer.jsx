@@ -1,9 +1,9 @@
+import React from "react";
+
 const Footer = () => {
   return (
-    <footer
-      style={{ padding: "10px", textAlign: "center", background: "#eee" }}
-    >
-      <p>&copy; 2025 My Shop</p>
+    <footer className="bg-gray-500 text-primary-content p-4 text-center">
+      <p>© 2025. Internet magazinga hush kelibsiz. Bu magazinda huquqlariz himoya qilinadi</p>
     </footer>
   );
 };

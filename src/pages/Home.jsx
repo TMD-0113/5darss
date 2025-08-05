@@ -1,12 +1,11 @@
 import ProductList from "../components/ProductList";
 
-const Home = () => {
+function Home() {
   return (
-    <div>
-      <h2 style={{ textAlign: "center" }}>internet magazin </h2>
+    <main>
       <ProductList />
-    </div>
+    </main>
   );
-};
+}
 
 export default Home;
