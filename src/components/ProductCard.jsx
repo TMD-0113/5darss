@@ -1,31 +1,34 @@
-import { useLocation } from "react-router-dom";
+import React, { useContext } from "react";
+import { GlobalContext } from "../context/globalContext";
 
-function Cart() {
-  const location = useLocation();
-  const cartItems = location.state?.cartItems || [];
+function ProductCard({ product }) {
+  const { id, title, price, image } = product;
+  const { basket, dispatch } = useContext(GlobalContext);
+
+  const isInBasket = basket.some((item) => item.id === id);
+
+  const handleAdd = () => {
+    if (isInBasket) {
+      dispatch({ type: "INCREMENT_PRODUCT", payload: id });
+    } else {
+      dispatch({ type: "ADD_PRODUCT", payload: product });
+    }
+  };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Savat</h2>
-      {cartItems.length === 0 ? (
-        <p>Savat bo‘sh.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {cartItems.map(({ id, title, image, price }) => (
-            <div key={id} className="bg-white shadow rounded p-4">
-              <img
-                src={image}
-                alt={title}
-                className="h-40 object-contain mx-auto"
-              />
-              <h3 className="text-lg font-semibold mt-2">{title}</h3>
-              <p className="text-yellow-600 font-bold">${price}</p>
-            </div>
-          ))}
-        </div>
-      )}
+    <div className="card bg-base-100 text-base-content shadow-lg p-4 rounded-xl border border-base-300 transition-all duration-300">
+      <img src={image} alt={title} className="h-40 object-contain mx-auto" />
+      <h3 className="font-semibold mt-3 text-center">{title}</h3>
+      <p className="text-yellow-500 font-bold text-center">${price}</p>
+
+      <button
+        onClick={handleAdd}
+        className="btn btn-primary mt-3 w-full transition-all duration-200"
+      >
+        {isInBasket ? "Soni oshirildi" : "Savatga qo‘shish"}
+      </button>
     </div>
   );
 }
 
-export default Cart;
+export default ProductCard;

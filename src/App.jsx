@@ -11,13 +11,13 @@ import MainLayout from "./layouts/MainLayout";
 import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import SignUp from "./pages/Signup";
-import ProductDetail from "./pages/ProductDetail"; 
+import ProductDetail from "./pages/ProductDetail";
 import { Protected } from "./components/Protected";
 
-import { GlobalContext } from "./context/globalContext";
+import { GlobalContextProvider, GlobalContext } from "./context/globalContext";
 import useFetch from "./hooks/useFetch";
 
-function App() {
+function AppRoutes() {
   const { user } = useContext(GlobalContext);
 
   const routes = createBrowserRouter(
@@ -67,6 +67,14 @@ function App() {
   }
 
   return <RouterProvider router={routes} />;
+}
+
+function App() {
+  return (
+    <GlobalContextProvider>
+      <AppRoutes />
+    </GlobalContextProvider>
+  );
 }
 
 export default App;

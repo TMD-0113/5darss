@@ -3,8 +3,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Outlet } from "react-router-dom";
 
-const MainLayout = ({ children }) => (
-  <div className="flex flex-col min-h-screen">
+const MainLayout = () => (
+  <div className="flex flex-col min-h-screen bg-base-100 text-base-content transition-all duration-300">
     <Navbar />
     <main className="flex-grow">
       <Outlet />

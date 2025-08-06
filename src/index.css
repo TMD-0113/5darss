@@ -6,38 +6,32 @@ html,
 #root {
   height: 100%;
   margin: 0;
-  background-color: #0096c7;
   font-family: Arial, sans-serif;
+  @apply bg-base-100 text-base-content;
 }
 
 .login-form {
-  background-color: #f0f4f8;
+  @apply bg-base-200 text-base-content;
   width: 350px;
   margin: auto;
   margin-top: 10vh;
   padding: 30px 40px;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  color: #1a202c;
   text-align: center;
 }
 
 .login-form h2 {
   margin-bottom: 25px;
   font-weight: 700;
-  color: #023e8a;
+  color: #0096c7;
 }
 
 .login-form input[type="email"],
 .login-form input[type="password"] {
-  width: 100%;
-  padding: 12px 15px;
+  @apply w-full px-4 py-2 rounded bg-base-100 border border-base-300 text-base-content placeholder-gray-400;
   margin: 10px 0 20px 0;
-  border: 1.8px solid #90caf9;
-  border-radius: 6px;
   font-size: 16px;
-  color: #1a202c;
-  background-color: #ffffff;
   transition: border-color 0.3s ease;
 }
 
@@ -48,16 +42,7 @@ html,
 }
 
 .login-form button {
-  background-color: #0077b6;
-  color: white;
-  border: none;
-  padding: 12px;
-  font-weight: 700;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  transition: background-color 0.3s ease;
+  @apply bg-primary text-white font-bold text-base rounded w-full py-3 transition;
 }
 
 .login-form button:hover {
@@ -67,7 +52,7 @@ html,
 .login-form .signup-text {
   margin-top: 20px;
   font-size: 14px;
-  color: #1a202c;
+  @apply text-base-content;
 }
 
 .login-form .signup-text a {

@@ -2,6 +2,15 @@ import React, { createContext, useReducer, useEffect } from "react";
 
 export const GlobalContext = createContext();
 
+const getInitialBasket = () => {
+  const saved = localStorage.getItem("basket");
+  return saved ? JSON.parse(saved) : [];
+};
+
+const getInitialTheme = () => {
+  return localStorage.getItem("theme") || "light";
+};
+
 const changeState = (state, action) => {
   const { type, payload } = action;
 
@@ -15,7 +24,7 @@ const changeState = (state, action) => {
     case "REMOVE_PRODUCT":
       return {
         ...state,
-        basket: state.basket.filter((product) => product.id !== payload),
+        basket: state.basket.filter((p) => p.id !== payload),
       };
 
     case "INCREMENT_PRODUCT":
@@ -38,6 +47,12 @@ const changeState = (state, action) => {
           .filter((item) => item.quantity > 0),
       };
 
+    case "TOGGLE_THEME":
+      const newTheme = state.theme === "light" ? "dark" : "light";
+      localStorage.setItem("theme", newTheme);
+      document.documentElement.setAttribute("data-theme", newTheme);
+      return { ...state, theme: newTheme };
+
     case "SIGNUP":
       const newUser = {
         displayName: payload.firstName + " " + payload.lastName,
@@ -50,36 +65,30 @@ const changeState = (state, action) => {
       return state;
 
     case "LOGIN":
-      return {
-        ...state,
-        user: payload,
-      };
+      return { ...state, user: payload };
 
     case "LOGOUT":
-      return {
-        ...state,
-        user: null,
-      };
+      return { ...state, user: null };
 
     default:
       return state;
   }
 };
 
-const getInitialBasket = () => {
-  const saved = localStorage.getItem("basket");
-  return saved ? JSON.parse(saved) : [];
-};
-
 export const GlobalContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(changeState, {
     basket: getInitialBasket(),
     user: null,
+    theme: getInitialTheme(),
   });
 
   useEffect(() => {
     localStorage.setItem("basket", JSON.stringify(state.basket));
   }, [state.basket]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", state.theme);
+  }, [state.theme]);
 
   return (
     <GlobalContext.Provider value={{ ...state, dispatch }}>
